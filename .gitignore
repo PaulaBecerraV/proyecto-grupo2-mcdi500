@@ -218,3 +218,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Base nacional DEIS 2022 (341 MB, supera el limite de GitHub)
+data/raw/EGRE_DATOS_ABIERTOS_2022.csv
+data/raw/*.zip
