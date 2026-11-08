@@ -1,9 +1,8 @@
 # Diccionario de variables
 
-## Fuente
-Diccionario oficial del DEIS correspondiente a la base de egresos hospitalarios descargada y utilizada en el proyecto.
 
-## Variables originales
+## Variables originales obtenidas del archivo descargado desde el sitio web del DEIS/MINSAL
+
 PERTENENCIA_ESTABLECIMIENTO_SALU : Tipo de pertenencia (Perteneciente o no perteneciente al SNSS)
 
 SEXO : Código del sexo biológico del paciente
@@ -35,3 +34,7 @@ DIAS_ESTAD: Días de estada total
 CONDICION_EGRESO: código de la condición al egreso del paciente
                   1 = Vivo
                   2 = Fallecido
+
+## Fuente
+Diccionario oficial del DEIS correspondiente a la base de egresos hospitalarios descargada y utilizada en el proyecto. Disponible en: 
+
