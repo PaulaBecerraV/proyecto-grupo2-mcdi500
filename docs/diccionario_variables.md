@@ -1,7 +1,7 @@
 # Diccionario de variables
 
 
-## Variables originales obtenidas del archivo descargado desde el sitio web del DEIS/MINSAL
+#### Variables originales obtenidas del archivo descargado desde el sitio web del DEIS/MINSAL
 
 PERTENENCIA_ESTABLECIMIENTO_SALU : Tipo de pertenencia (Perteneciente o no perteneciente al SNSS)
 
