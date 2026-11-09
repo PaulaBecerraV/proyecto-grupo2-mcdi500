@@ -1,40 +1,33 @@
 # Diccionario de variables
 
+Este diccionario describe las 18 columnas originales de `EGRE_DATOS_ABIERTOS_2022.csv`. La unidad de análisis es el egreso hospitalario. **Tipo** indica la naturaleza estadística de la variable y **rol analítico** indica su función en el proyecto. Los valores y códigos se cotejaron con el CSV nacional. Los ejemplos de categorías no constituyen catálogos exhaustivos.
 
-#### Variables originales obtenidas del archivo descargado desde el sitio web del DEIS/MINSAL
+| Variable | Tipo | Rol analítico | Descripción | Valores o códigos | Notas |
+| --- | --- | --- | --- | --- | --- |
+| `PERTENENCIA_ESTABLECIMIENTO_SALUD` | Categórica nominal | Contexto institucional | Indica si el establecimiento pertenece al Sistema Nacional de Servicios de Salud (SNSS). | Perteneciente al SNSS, no perteneciente al SNSS, `*`. | El diccionario oficial abrevia el encabezado como `PERTENENCIA_ESTABLECIMIENTO_SALU`. |
+| `SEXO` | Categórica nominal | Grupo de riesgo y referencia | Sexo consignado en el registro del egreso. | `MUJER`, `HOMBRE`, `INTERSEX (INDETERMINDADO)`, `*`. | La comparación definida es mujeres frente a hombres. `*` se trata como desconocido. La grafía de la categoría intersex se conserva tal como figura en el CSV. |
+| `GRUPO_EDAD` | Categórica ordinal | Grupo de riesgo y referencia | Tramo de edad al ingreso. | Menor de un año, `1 a 9`, intervalos de diez años de `10 a 19` a `80 a 89`, `90 y más`, `*`. | `40 a 49` es el tramo de interés. `*` queda fuera del orden etario. |
+| `ETNIA` | Categórica nominal | Grupo de riesgo y referencia | Indica si la persona se identifica con alguna etnia. | `Si se identifica con alguna etnia`, `No se identifica con alguna etnia`, `*`. | `*` se trata como desconocido. Las categorías informadas corresponden a autoidentificación general. |
+| `GLOSA_PAIS_ORIGEN` | Categórica nominal | Contexto demográfico | Indica si la persona es chilena o extranjera. | `Chileno`, `extranjero`, `*`. | El campo agrupa a las personas extranjeras en una sola categoría. |
+| `COMUNA_RESIDENCIA` | Categórica nominal codificada | Construcción de provincia | Código de la comuna de residencia. | Códigos territoriales de cinco dígitos. Para La Araucanía, `091xx` identifica Cautín y `092xx` identifica Malleco. | Se lee como texto para conservar los ceros iniciales. |
+| `GLOSA_COMUNA_RESIDENCIA` | Categórica nominal de alta cardinalidad | Etiqueta territorial | Nombre de la comuna de residencia. | Por ejemplo, Temuco o Angol. | Complementa el código de comuna. |
+| `REGION_RESIDENCIA` | Categórica nominal codificada | Filtro territorial | Código de la región de residencia. | `01` a `16`, `*`. `09` corresponde a La Araucanía. | El filtro regional conserva `09`. `*` se trata como desconocido. |
+| `GLOSA_REGION_RESIDENCIA` | Categórica nominal | Etiqueta territorial | Nombre de la región de residencia. | Por ejemplo, `De La Araucanía`. También se observa `*`. | Complementa el código de región. `*` se trata como desconocido. |
+| `PREVISION` | Categórica nominal codificada | Contexto de cobertura | Código de la previsión de salud al ingreso. | `1` FONASA, `2` ISAPRE, `3` CAPREDENA, `4` DIPRECA, `5` SISA, `96` NINGUNA, `99` DESCONOCIDO, `*`. | El validador la infiere como fecha. Su significado y la correspondencia con `GLOSA_PREVISION` sustentan la clasificación nominal. |
+| `GLOSA_PREVISION` | Categórica nominal | Etiqueta de cobertura | Nombre de la categoría de previsión de salud al ingreso. | FONASA, ISAPRE, CAPREDENA, DIPRECA, SISA, NINGUNA, DESCONOCIDO, `*`. | Permite interpretar el código de `PREVISION` y distinguir ausencia de previsión de previsión desconocida. |
+| `ANO_EGRESO` | Temporal con resolución anual | Delimitación del período | Año del egreso hospitalario. | `2022` en todos los registros del subconjunto regional. En la base nacional también aparece `*`. | 2022 es el único año informado y el campo carece de variación temporal para el análisis. |
+| `DIAG1` | Categórica nominal de alta cardinalidad | Selección de egresos por colelitiasis | Código CIE-10 del diagnóstico principal. | Códigos alfanuméricos, por ejemplo, `K802` (K80.2). El proyecto utiliza la categoría K80. | El CSV registra los códigos sin el punto de la notación CIE-10. |
+| `DIAG2` | Categórica nominal de alta cardinalidad | Contexto de causa externa | Código CIE-10 de la causa externa. | Códigos como `X599` o `W189`, o celda vacía. | Está vacía en el 90,6 % de la base nacional y en los 3.789 egresos del subconjunto K80 de La Araucanía. Es esperable que el campo quede vacío en egresos sin una causa externa registrada. |
+| `DIAS_ESTADA` | Cuantitativa discreta | Descripción de la duración de la hospitalización | Número total de días de estada. | Días enteros, por ejemplo, `1`, `2` o `3`. | El diccionario oficial abrevia el encabezado como `DIAS_ESTAD`. |
+| `CONDICION_EGRESO` | Categórica nominal binaria | Descripción de la condición al egreso | Condición vital registrada al egreso hospitalario. | `1` Vivo, `2` Fallecido. | Los números identifican categorías. |
+| `GLOSA_INTERV_Q_PPAL` | Texto descriptivo de alta cardinalidad | Construcción del indicador de colecistectomía | Glosa de la intervención quirúrgica principal registrada en el egreso. | Por ejemplo, colecistectomía por videolaparoscopía, o celda vacía. | El indicador se construye buscando `colecistectom` sin distinguir mayúsculas. La ausencia de coincidencia indica que la colecistectomía no está registrada en este campo. |
+| `GLOSA_PROCED_PPAL` | Texto descriptivo de alta cardinalidad | Contexto de procedimientos | Glosa del procedimiento principal registrado en el egreso. | Por ejemplo, `Parto normal`, o celda vacía. | Es un campo distinto de la glosa de intervención quirúrgica principal. |
 
-PERTENENCIA_ESTABLECIMIENTO_SALU : Tipo de pertenencia (Perteneciente o no perteneciente al SNSS)
+## Códigos de desconocido y celdas vacías
 
-SEXO : Código del sexo biológico del paciente
+El símbolo `*` aparece como un valor enmascarado en sexo, etnia y región. Para el análisis se trata como desconocido y se distingue de una celda vacía. En el CSV original, `96` y `99` no aparecen en esas tres columnas. En `PREVISION` sí se observan y corresponden a `NINGUNA` y `DESCONOCIDO`, respectivamente, según `GLOSA_PREVISION`. Los códigos se interpretan dentro de la variable en que aparecen.
 
-GRUPO_EDAD: Grupo de edad del paciente al momento de su ingreso
+## Fuentes
 
-GLOSA_PAIS_ORIGEN: Indica si es chileno o extranjero
-
-COMUNA_RESIDENCIA: Código comuna de residencia del paciente
-
-GLOSA_COMUNA_RESIDENCIA: Nombre de la comuna de residencia
-
-REGION_RESIDENCIA: Código región de residencia del paciente
-
-GLOSA_REGION_RESIDENCIA: Nombre de la región de residencia
-
-PREVISION: Código de previsión de salud del paciente al momento del ingreso
-
-GLOSA_PREVISION: Glosa previsión de salud del paciente al momento del ingreso
-
-ANO_EGRESO: Año del egreso
-
-DIAG1: Código CIE-10 del diagnóstico principal
-
-DIAG2: Código CIE-10 de la causa externa
-
-DIAS_ESTAD: Días de estada total 
-
-CONDICION_EGRESO: código de la condición al egreso del paciente
-                  1 = Vivo
-                  2 = Fallecido
-
-## Fuente
-Diccionario oficial del DEIS correspondiente a la base de egresos hospitalarios descargada y utilizada en el proyecto. Disponible en: 
-
+- Departamento de Estadísticas e Información de Salud, Ministerio de Salud de Chile. [Egresos hospitalarios 2022](https://repositoriodeis.minsal.cl/DatosAbiertos/EGRESOS/EGRESOS_2022.zip). El ZIP contiene `EGRE_DATOS_ABIERTOS_2022.csv` y `Diccionario BD egresos hospitalario.xlsx`. La hoja de definiciones cubre 16 variables. Las dos glosas de intervención y procedimiento se describen a partir de los encabezados y del contenido del CSV.
+- Proyecto MCDI500, Grupo 2. [Obtención del subconjunto regional](../F2/F2_01_obtencion.ipynb) y [transformación de las variables de análisis](../F2/F2_03_transformacion.ipynb). [Subconjunto transformado K80](../data/processed/egresos_araucania_k80_transformado.csv).
