@@ -2,7 +2,8 @@
 
 **Colecistectomía en grupos de riesgo de cáncer de vesícula, La Araucanía 2022**
 
-Proyecto del curso Programación para la Ciencia de Datos. Este repositorio usa los egresos hospitalarios abiertos del Departamento de Estadísticas e Información de Salud (DEIS - MINSAL) para preparar el análisis de la proporción de egresos por colelitiasis con colecistectomía registrada en las provincias de Cautín y Malleco durante el año 2022.
+Proyecto del curso "Programación para la Ciencia de Datos" del programa de Magister en Inteligencia Artificial y Ciencia de Datos de la Universidad Andrés Bello, Santiago, Chile. 
+Este repositorio usa los egresos hospitalarios abiertos del Departamento de Estadísticas e Información de Salud (DEIS - MINSAL) para preparar el análisis de la proporción de egresos por colelitiasis con colecistectomía registrada en las provincias de Cautín y Malleco durante el año 2022.
 
 ## Estructura del repositorio
 
