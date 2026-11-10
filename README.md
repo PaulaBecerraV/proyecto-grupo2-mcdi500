@@ -45,7 +45,7 @@ El listado de dependencias se generó en Windows. El paso con `awk` crea una cop
 ## Obtención de los datos
 
 1. Descargar el [ZIP oficial de egresos hospitalarios 2022 del DEIS](https://repositoriodeis.minsal.cl/DatosAbiertos/EGRESOS/EGRESOS_2022.zip).
-2. Extraer `EGRE_DATOS_ABIERTOS_2022.csv` y guárdalo como `data/raw/EGRE_DATOS_ABIERTOS_2022.csv`.
+2. Extraer `EGRE_DATOS_ABIERTOS_2022.csv` y guardar como `data/raw/EGRE_DATOS_ABIERTOS_2022.csv`.
 3. Ejecutar F2_01 para generar el subconjunto regional.
 
 El CSV nacional y su ZIP se excluyen del control de versiones mediante `.gitignore`. Los dos CSV de `data/processed/` están disponibles en el repositorio. Si se usa esas copias, se puede ejecutar F2_02, F2_03 o F2_04 directamente con el archivo de entrada que indica la tabla.
