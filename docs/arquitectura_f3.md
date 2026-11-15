@@ -33,17 +33,41 @@ classDiagram
         +ejecutar(datos) DataFrame
     }
 
+    class CalculadorBase {
+        <<abstracta>>
+        #DataFrame _df
+        +n_egresos int
+        +calcular() DataFrame
+        +proporcion_global() float
+        #_contar()*
+    }
+
+    class CalcBucle {
+        #_contar()
+    }
+
+    class CalcPandas {
+        #_contar()
+    }
+
+    class CalcNumpy {
+        #_contar()
+    }
+
     EtapaBase <|-- FiltroColelitiasis
     EtapaBase <|-- AsignadorProvincia
     EtapaBase <|-- MarcadorGruposRiesgo
     EtapaBase <|-- MarcadorColecistectomia
     Pipeline o-- "1..*" EtapaBase : contiene
+    CalculadorBase <|-- CalcBucle
+    CalculadorBase <|-- CalcPandas
+    CalculadorBase <|-- CalcNumpy
+    Pipeline ..> CalculadorBase : su resultado alimenta
 ```
 
 ## Cómo leer el diagrama
 
-- **Herencia:** las cuatro clases de etapa heredan de `EtapaBase`, lo que las obliga a implementar el método `ejecutar`.
-- **Polimorfismo:** el `Pipeline` llama a `ejecutar` en cada etapa sin necesitar saber cuál es; cada una responde a su propia manera.
-- **Encapsulamiento:** el `Pipeline` guarda sus etapas en el atributo interno `_etapas` y solo permite consultarlas mediante la propiedad `etapas`, no modificarlas.
-- **Patrón de diseño:** se aplica el patrón *Pipeline* (tubería). Cada etapa recibe la tabla, la transforma y la entrega a la siguiente. Para agregar un paso nuevo basta con crear otra clase que herede de `EtapaBase`, sin modificar las existentes.
-- 
+- **Herencia:** las cuatro clases de etapa heredan de `EtapaBase`, lo que las obliga a implementar el método `ejecutar`. Las tres estrategias heredan de `CalculadorBase` y reutilizan de ella la validación, el formato de la tabla y la proporción global.
+- **Polimorfismo:** el `Pipeline` llama a `ejecutar` en cada etapa sin necesitar saber cuál es; cada una responde a su propia manera. Del mismo modo, las tres estrategias se usan con el mismo método, `calcular()`.
+- **Encapsulamiento:** el `Pipeline` guarda sus etapas en el atributo interno `_etapas` y solo permite consultarlas mediante la propiedad `etapas`, no modificarlas. `CalculadorBase` valida los datos al crear el objeto y los guarda en `_df`.
+- **Patrón de diseño:** se aplica el patrón *Pipeline* (tubería). Cada etapa recibe la tabla, la transforma y la entrega a la siguiente. Para agregar un paso nuevo basta con crear otra clase que herede de `EtapaBase`, sin modificar las existentes. En los calculadores se aplican los patrones *Strategy* (estrategias intercambiables) y *Template Method* (`CalculadorBase` fija los pasos comunes y cada estrategia define cómo contar).
