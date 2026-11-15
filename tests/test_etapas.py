@@ -118,6 +118,31 @@ class TestEtapas(unittest.TestCase):
             tr.transformar(entrada).reset_index(drop=True),
         )
 
+class TestMarcadorAprende(unittest.TestCase):
+    """El marcador aprende el vocabulario en ajustar() y lo aplica en ejecutar()."""
+
+    def test_aprende_el_vocabulario_de_los_datos(self):
+        datos = pd.DataFrame({"GLOSA_INTERV_Q_PPAL": [
+            "Colecistectomía laparoscópica", "Apendicectomía", None,
+            "Colecistectomía laparoscópica",
+        ]})
+        marcador = MarcadorColecistectomia().ajustar(datos)
+        self.assertEqual(marcador.vocabulario,
+                         frozenset({"Colecistectomía laparoscópica"}))
+
+    def test_aplica_lo_aprendido_a_datos_nuevos(self):
+        entrenamiento = pd.DataFrame({"GLOSA_INTERV_Q_PPAL": ["Colecistectomía abierta"]})
+        nuevos = pd.DataFrame({"GLOSA_INTERV_Q_PPAL": [
+            "Colecistectomía abierta", "Colecistectomía robótica",
+        ]})
+        marcador = MarcadorColecistectomia().ajustar(entrenamiento)
+        marcas = marcador.ejecutar(nuevos)["FLAG_COLECISTECTOMIA"].tolist()
+        self.assertEqual(marcas, [True, False])   # la glosa no vista no se marca
+
+    def test_consultar_antes_de_ajustar_lanza_error(self):
+        with self.assertRaises(RuntimeError):
+            MarcadorColecistectomia().vocabulario
+
 
 if __name__ == "__main__":
     unittest.main()
