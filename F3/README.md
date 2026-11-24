@@ -56,14 +56,12 @@ Abre cada notebook en JupyterLab, reinicia el kernel y ejecuta todas sus celdas 
 
 | Notebook | Entrada | Resultado esperado |
 | --- | --- | --- |
-| `F3_01_nucleo_poo.ipynb` | CSV regional y CSV transformado de Fase 2. | Transforma el conjunto regional con las etapas del pipeline. Comprueba la igualdad frente a `transformar()` y frente a un recorrido recursivo. También contrasta las cinco columnas derivadas con el CSV de F2_03 y calcula las proporciones con NumPy. |
+| `[F3_01_nucleo_poo.ipynb](F3_01_nucleo_poo.ipynb)` | CSV regional y CSV transformado de Fase 2. | Transforma el conjunto regional con las etapas del pipeline. Comprueba la igualdad frente a `transformar()` y frente a un recorrido recursivo. También contrasta las cinco columnas derivadas con el CSV de F2_03 y calcula las proporciones con NumPy. |
 | [`F3_02_eficiencia.ipynb`](F3_02_eficiencia.ipynb) | CSV transformado de F2_03. | Compara cuatro estrategias equivalentes mediante mediciones de tiempo y memoria. La tabla final de NumPy incluye las proporciones por provincia, grupo y referencia, con intervalos de confianza de Wilson al 95 %. El conjunto analizado contiene **3.789 egresos por colelitiasis**, de los cuales **3.056 (80,7 %)** registraron colecistectomía como intervención principal. |
 
 Ambos notebooks están integrados en `main`. Ejecuta primero `F3_01` para revisar el flujo completo y su equivalencia con Fase 2. Luego ejecuta `F3_02` para revisar la comparación de rendimiento y la tabla de proporciones que sirve de entrada a Fase 4.
 
 Los CSV versionados permiten ejecutar el análisis de Fase 3. Para recalcular el desglose de los 70 egresos con región de residencia enmascarada, descarga el CSV nacional del DEIS siguiendo las instrucciones del [README principal](../README.md#obtención-de-los-datos).
-
-`F3_02` puede ejecutarse en `main`. `F3_01` y las cuatro etapas de `src/etapas.py` están disponibles en la rama [`feat/f3-01-integracion`](https://github.com/PaulaBecerraV/proyecto-grupo2-mcdi500/tree/feat/f3-01-integracion). El diagrama de clases se incorpora mediante el [PR #6](https://github.com/PaulaBecerraV/proyecto-grupo2-mcdi500/pull/6). Después de integrar la rama del notebook, el orden sugerido de lectura y ejecución es `F3_01` para el flujo general y `F3_02` para el detalle de la comparación de rendimiento.
 
 ## Pruebas del pipeline
 
