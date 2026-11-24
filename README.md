@@ -12,8 +12,10 @@ Este repositorio usa los egresos hospitalarios abiertos del Departamento de Esta
 | --- | --- |
 | [`F1/`](F1/) | Definición del problema, pregunta, objetivos y verificación del entorno. |
 | [`F2/`](F2/) | Obtención, exploración, transformación y validación de los datos. |
-| `F3/` y `F4/` | Carpetas para las siguientes fases del proyecto. |
-| `src/` | Carpeta reservada para funciones reutilizables del proyecto. |
+| [`F3/`](F3/README.md) | Núcleo orientado a objetos, comparación de estrategias e instrucciones de ejecución. |
+| [`F4/`](F4/) | Carpeta de la fase de presentación y comunicación de resultados. |
+| [`src/`](src/) | Módulos de entorno, transformación, pipeline y cálculo de proporciones. |
+| [`tests/`](tests/) | Pruebas automatizadas del pipeline y sus etapas. |
 | `data/raw/` | Ubicación local del CSV nacional del DEIS. |
 | [`data/processed/`](data/processed/) | CSV regional y CSV transformado de egresos por colelitiasis. |
 | [`docs/`](docs/) | [Diccionario de variables](docs/diccionario_variables.md), [validación de la base nacional](docs/validacion_dataset.md) y [validación del subconjunto final](docs/validacion_colelitiasis.md). |
@@ -37,12 +39,11 @@ py -3.13 -m venv .venv
 ```bash
 python3.13 -m venv .venv
 source .venv/bin/activate
-awk '!/^pywinpty==/' requirements.txt > .venv/requirements-posix.txt
-python -m pip install -r .venv/requirements-posix.txt
+python -m pip install -r requirements.txt
 jupyter lab
 ```
 
-El listado de dependencias se generó en Windows. El paso con `awk` crea una copia local que omite `pywinpty`, una dependencia específica de Windows. Para ejecutar los notebooks, selecciona el kernel de Python del entorno `.venv` y ejecuta todas las celdas en el orden indicado abajo.
+En JupyterLab, selecciona el kernel de Python del entorno `.venv` y ejecuta todas las celdas siguiendo el orden indicado abajo.
 
 ## Obtención de los datos
 
@@ -62,8 +63,7 @@ El CSV nacional y su ZIP se excluyen del control de versiones mediante `.gitigno
 | 4 | [`F2_03_transformacion.ipynb`](F2/F2_03_transformacion.ipynb) | `data/processed/egresos_araucania_2022.csv` | `data/processed/egresos_araucania_k80_transformado.csv` con **3.789 egresos y 23 variables**. Incluye provincia, grupos de riesgo e indicador de colecistectomía registrada. |
 | 5 | [`F2_04_validacion.ipynb`](F2/F2_04_validacion.ipynb) | `data/processed/egresos_araucania_k80_transformado.csv` | Comprobaciones del subconjunto final e informe `docs/validacion_colelitiasis.md`. |
 
-**Ruta de F2_02.** La variable `RUTA` de la primera celda apunta al CSV desde la raíz del repositorio. Si el directorio de trabajo del kernel es `F2/`, usar `RUTA = "../data/processed/egresos_araucania_2022.csv"` en copia local antes de ejecutar el notebook.
-
+F2_02 construye automáticamente la ruta al CSV regional. Para ejecutar los notebooks de Fase 3, sigue las instrucciones del [README de F3](F3/README.md).
 ## Fuente y limitaciones
 
 Para consultar y descargar las bases de datos de egresos hospitalarios correspondientes a otros años, visitar el [portal de Datos Abiertos del DEIS](https://deis.minsal.cl/#datosabiertos).
