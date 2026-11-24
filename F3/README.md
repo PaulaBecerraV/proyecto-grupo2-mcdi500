@@ -2,8 +2,9 @@
 
 **Grupo 2 · MCDI500 · Programación para la Ciencia de Datos**
 
-La Fase 3 reutiliza las transformaciones de los egresos hospitalarios de La Araucanía de 2022. El pipeline aplica etapas de filtrado y transformación en orden. El cálculo de proporciones compara tres implementaciones para estimar, por grupo de riesgo y provincia, la proporción de egresos por colelitiasis con colecistectomía registrada. La unidad de análisis es el egreso hospitalario.
+La Fase 3 reutiliza las transformaciones de los egresos hospitalarios de La Araucanía de 2022. El pipeline aplica etapas de filtrado y transformación en orden. El cálculo de proporciones compara cuatro implementaciones para estimar, por grupo de riesgo y provincia, la proporción de egresos por colelitiasis con colecistectomía registrada. La unidad de análisis es el egreso hospitalario.
 
+`MarcadorColecistectomia` se ajusta con las glosas de la intervención principal mediante `ajustar()` y aplica el vocabulario obtenido mediante `ejecutar()`. Si se llama a `ejecutar()` con un marcador sin ajustar, el método lo ajusta primero con los datos de entrada.
 ## Archivos principales
 
 | Archivo | Función |
@@ -11,8 +12,9 @@ La Fase 3 reutiliza las transformaciones de los egresos hospitalarios de La Arau
 | [`src/base.py`](../src/base.py) y [`src/pipeline.py`](../src/pipeline.py) | Definen el contrato de las etapas y su ejecución ordenada. |
 | [`src/transformacion.py`](../src/transformacion.py) | Reúne las funciones reutilizadas de Fase 2. |
 | [`src/etapas.py`](../src/etapas.py) | Implementa FiltroColelitiasis, AsignadorProvincia, MarcadorGruposRiesgo y MarcadorColecistectomia, reutilizando las funciones de transformación. |
-| [`src/proporciones.py`](../src/proporciones.py) | Implementa las estrategias de cálculo con bucle de Python, agrupación con pandas y máscaras de NumPy. |
-| [`tests/test_pipeline.py`](../tests/test_pipeline.py) | Verifica el contrato, el flujo, los casos límite y el manejo de errores. |
+| [`src/proporciones.py`](../src/proporciones.py) | Implementa cuatro estrategias de cálculo: bucle de Python, agrupación con pandas, máscaras de NumPy y recursividad por división y conquista. |
+| [`tests/test_pipeline.py`](../tests/test_pipeline.py) y [`tests/test_etapas.py`](../tests/test_etapas.py) | Verifican el contrato del pipeline, las etapas de transformación y el ajuste y aplicación del marcador de colecistectomía. |
+| [`F3_01_nucleo_poo.ipynb`](F3_01_nucleo_poo.ipynb) | Demuestra el pipeline orientado a objetos y comprueba su equivalencia con la transformación de Fase 2. |
 | [`docs/arquitectura_f3.md`](../docs/arquitectura_f3.md) | Presenta el diagrama de clases y explica herencia, polimorfismo, encapsulamiento y el patrón Pipeline. |
 | [`F3_02_eficiencia.ipynb`](F3_02_eficiencia.ipynb) | Verifica la equivalencia de las estrategias y compara su tiempo y memoria. |
 
@@ -55,7 +57,11 @@ Abre cada notebook en JupyterLab, reinicia el kernel y ejecuta todas sus celdas 
 | Notebook | Entrada | Resultado esperado |
 | --- | --- | --- |
 | `F3_01_nucleo_poo.ipynb` | CSV regional y CSV transformado de Fase 2. | Transforma el conjunto regional con las etapas del pipeline. Comprueba la igualdad frente a `transformar()` y frente a un recorrido recursivo. También contrasta las cinco columnas derivadas con el CSV de F2_03 y calcula las proporciones con NumPy. |
-| [`F3_02_eficiencia.ipynb`](F3_02_eficiencia.ipynb) | CSV transformado de F2_03. Puede ejecutarse con ese archivo directamente. | Compara las tres estrategias de cálculo y comprueba que arrojen los mismos resultados. Verifica **3.789 egresos por colelitiasis** y **3.056 con colecistectomía registrada (80,7 %)**. Los tiempos pueden variar según el equipo. |
+| [`F3_02_eficiencia.ipynb`](F3_02_eficiencia.ipynb) | CSV transformado de F2_03. | Compara cuatro estrategias equivalentes mediante mediciones de tiempo y memoria. La tabla final de NumPy incluye las proporciones por provincia, grupo y referencia, con intervalos de confianza de Wilson al 95 %. El conjunto analizado contiene **3.789 egresos por colelitiasis**, de los cuales **3.056 (80,7 %)** registraron colecistectomía como intervención principal. |
+
+Ambos notebooks están integrados en `main`. Ejecuta primero `F3_01` para revisar el flujo completo y su equivalencia con Fase 2. Luego ejecuta `F3_02` para revisar la comparación de rendimiento y la tabla de proporciones que sirve de entrada a Fase 4.
+
+Los CSV versionados permiten ejecutar el análisis de Fase 3. Para recalcular el desglose de los 70 egresos con región de residencia enmascarada, descarga el CSV nacional del DEIS siguiendo las instrucciones del [README principal](../README.md#obtención-de-los-datos).
 
 `F3_02` puede ejecutarse en `main`. `F3_01` y las cuatro etapas de `src/etapas.py` están disponibles en la rama [`feat/f3-01-integracion`](https://github.com/PaulaBecerraV/proyecto-grupo2-mcdi500/tree/feat/f3-01-integracion). El diagrama de clases se incorpora mediante el [PR #6](https://github.com/PaulaBecerraV/proyecto-grupo2-mcdi500/pull/6). Después de integrar la rama del notebook, el orden sugerido de lectura y ejecución es `F3_01` para el flujo general y `F3_02` para el detalle de la comparación de rendimiento.
 
@@ -64,7 +70,7 @@ Abre cada notebook en JupyterLab, reinicia el kernel y ejecuta todas sus celdas 
 Desde la raíz del repositorio y con el entorno del proyecto activo:
 
 ```bash
-python -m unittest discover -s tests -p test_pipeline.py -v
+python -m unittest discover -s tests -v
 ```
 
-En Windows, si el entorno no está activado, sustituye `python` por `.\.venv\Scripts\python.exe`. Se esperan nueve pruebas aprobadas con datos sintéticos. Para revisar el diseño inicial y su integración en F3, consulta [`README_esqueleto.md`](README_esqueleto.md) y el [PR #2](https://github.com/PaulaBecerraV/proyecto-grupo2-mcdi500/pull/2).
+En Windows, si el entorno no está activado, sustituye `python` por `.\.venv\Scripts\python.exe`. La suite actual reúne 20 pruebas automatizadas en test_pipeline.py y test_etapas.py. Para revisar el diseño inicial y su integración en F3, consulta [`README_esqueleto.md`](README_esqueleto.md) y el [PR #2](https://github.com/PaulaBecerraV/proyecto-grupo2-mcdi500/pull/2).
